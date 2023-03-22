@@ -15,13 +15,13 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value="get-all-users")
+    @GetMapping(value="/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userRepository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -31,13 +31,13 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping(value="/create")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userRepository.save(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         Optional<User> currentUser = userRepository.findById(id);
         if (currentUser.isPresent()) {
@@ -50,7 +50,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         try {
             userRepository.deleteById(id);
