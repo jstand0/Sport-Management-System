@@ -1,5 +1,7 @@
-package Users;
+package com.example.application.UserController;
 
+import com.example.application.User.User;
+import com.example.application.UserRepository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,21 +9,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 @RequestMapping
 public class UserController {
-
     @Autowired
-    private UserRepository userRepository;
+    public UserRepo userRepository;
 
-    @GetMapping(value="/users")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userRepository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -31,13 +31,13 @@ public class UserController {
         }
     }
 
-    @PostMapping(value="/create")
+    @PostMapping("/post")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userRepository.save(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/put/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         Optional<User> currentUser = userRepository.findById(id);
         if (currentUser.isPresent()) {
