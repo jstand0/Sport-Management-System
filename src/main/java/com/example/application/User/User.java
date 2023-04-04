@@ -1,18 +1,17 @@
 package com.example.application.User;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
 
 @Entity
-@Table(name = "Users")
 @Getter
+@Table(name = "users")
 @Setter
 @NoArgsConstructor
 public class User {
-
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -23,12 +22,15 @@ public class User {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
+
     public long id;
 
     public String name;
 
+    public String email;
+
     public User(String name) {
         this.name = name;
-    }
 
+    }
 }
