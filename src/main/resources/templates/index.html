@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}" />
-    <script src="../static/js/script.js" th:src="@{/js/script.js}"></script>
 </head>
 <body>
 <header>
@@ -18,8 +17,6 @@
 </header>
 <main>
      <form>
-         <p th:if="${loginError}" class="error">Wrong user or password</p>
-         <form th:action="@{/login.html}" method="post">
              <label for="username">Username</label>:
              <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
              <label for="password">Password</label>:
@@ -30,6 +27,7 @@
          </div>
      </form>
 </main>
+</form>
     <ul>
         <li th:each="item : ${items}" th:text="${item}"></li>
     </ul>

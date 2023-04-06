@@ -1,7 +1,7 @@
-package com.example.application.UserController;
+package com.example.application.Controller;
 
 import com.example.application.User.User;
-import com.example.application.UserRepository.UserRepo;
+import com.example.application.UserRepository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +11,18 @@ import java.util.List;
 import java.util.Optional;
 @RestController
 @RequestMapping
-public class UserController {
+public class Controller {
     @Autowired
-    public UserRepo userRepository;
+    public UserRepository userRepository;
+    @GetMapping("index")
+    public String home(){
+        return "index";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login";
+    }
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
