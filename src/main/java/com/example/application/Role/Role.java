@@ -15,8 +15,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name="roles")
+@Entity
 public class Role
 {
     @Id
