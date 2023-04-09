@@ -3,7 +3,7 @@ package com.example.application.Security;
 import com.example.application.Role.Role;
 import com.example.application.User.User;
 import com.example.application.UserRepository.UserRepository;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +15,9 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-@Lazy
 public class CustomUserDetailsService implements UserDetailsService {
 
+    @Autowired
     private UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
