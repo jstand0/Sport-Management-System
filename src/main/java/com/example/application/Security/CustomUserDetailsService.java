@@ -3,6 +3,7 @@ package com.example.application.Security;
 import com.example.application.Role.Role;
 import com.example.application.User.User;
 import com.example.application.UserRepository.UserRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +15,10 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
+@Lazy
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -35,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 
-    private Collection < ? extends GrantedAuthority> mapRolesToAuthorities(Collection <Role> roles) {
+    private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Collection <Role> roles) {
         Collection < ? extends GrantedAuthority> mapRoles = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());

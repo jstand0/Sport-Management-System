@@ -5,13 +5,14 @@ import com.example.application.Role.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Table;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Table(name = "users")
+@Table(appliesTo = "users")
 @Setter
 @NoArgsConstructor
 @Entity
@@ -37,6 +38,7 @@ public class User {
             joinColumns = {@JoinColumn(name = "USERS_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLES_ID", referencedColumnName = "ID")})
     private List<Role> roles = new ArrayList<>();
+
 }
 
 
