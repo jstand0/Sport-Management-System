@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Table;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(appliesTo = "roles")
+@Table(name = "roles")
 @Entity
 public class Role
 {
@@ -27,6 +26,6 @@ public class Role
     @Column(nullable=false, unique=true)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 }
