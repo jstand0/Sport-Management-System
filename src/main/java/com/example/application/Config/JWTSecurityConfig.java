@@ -55,9 +55,11 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling()
+                .and()
+                .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement()
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
