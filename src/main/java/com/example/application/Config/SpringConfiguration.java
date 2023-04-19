@@ -18,12 +18,12 @@ public class SpringConfiguration {
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
+                .password(passwordEncoder.encode(""))
                 .roles("USER")
                 .build();
 
         UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
+                .password(passwordEncoder.encode(""))
                 .roles("USER", "ADMIN")
                 .build();
 
