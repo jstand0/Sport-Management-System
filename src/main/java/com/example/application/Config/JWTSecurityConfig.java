@@ -6,6 +6,7 @@ import com.example.application.SiteController.JWTRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,13 +28,16 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
-    private JWTRequestFilter jwtRequestFilter;
-
-    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
+    private JWTRequestFilter jwtRequestFilter;
+
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // configure AuthenticationManager so that it knows from where to load
+        // user for matching credentials
+        // Use BCryptPasswordEncoder
         auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
@@ -50,7 +54,9 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilter(preAuthFilter())
+        http
+                .cors().and() // Added CORS configuration
+                .csrf().disable() // Disabled CSRF protection
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -60,7 +66,14 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    @Primary
+    public JWTRequestFilter preAuthFilter() throws Exception {
+        return new JWTRequestFilter();
     }
 }
