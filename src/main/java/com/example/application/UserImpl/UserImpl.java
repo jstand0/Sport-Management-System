@@ -5,27 +5,23 @@ import com.example.application.RoleRepository.RoleRepository;
 import com.example.application.User.User;
 import com.example.application.UserDto.UserDto;
 import com.example.application.UserRepository.UserRepository;
-import com.example.application.UserService.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserImpl implements UserService {
+public class UserImpl {
 
-    @Autowired
+
     private UserRepository userRepository;
-    @Autowired
+
     private RoleRepository roleRepository;
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
-    @Override
+
     public void saveUser(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
@@ -38,15 +34,15 @@ public class UserImpl implements UserService {
         if(role == null){
             role = checkRoleExist();
         }
-        user.setRoles(Arrays.asList(role));
+        user.setRoles(List.of(role));
         userRepository.save(user);
     }
 
-    @Override
+
     public User findByEmail(String email) {
             return userRepository.findByEmail(email);
         }
-    @Override public List<UserDto> findAllUsers() {
+    public List<UserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map((user) -> convertEntityToDto(user))
                 .collect(Collectors.toList());
