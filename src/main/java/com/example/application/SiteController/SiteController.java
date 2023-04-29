@@ -3,17 +3,16 @@ package com.example.application.SiteController;
 import com.example.application.User.User;
 import com.example.application.UserDto.UserDto;
 import com.example.application.UserRepository.UserRepository;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class SiteController {
 
     private UserRepository userRepository;
@@ -21,11 +20,6 @@ public class SiteController {
     @GetMapping("/index")
     public String home() {
         return "index.html";
-    }
-
-    @RequestMapping("/hello")
-    public String hello() {
-        return "Hello";
     }
 
     @GetMapping("/login")

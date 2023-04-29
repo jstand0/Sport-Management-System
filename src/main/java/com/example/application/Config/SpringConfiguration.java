@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SpringConfiguration {
-    
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("user")
@@ -26,10 +25,8 @@ public class SpringConfiguration {
                 .password(passwordEncoder.encode(""))
                 .roles("USER", "ADMIN")
                 .build();
-
         return new InMemoryUserDetailsManager(user, admin);
     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -42,7 +39,6 @@ public class SpringConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        return encoder;
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

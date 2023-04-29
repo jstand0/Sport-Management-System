@@ -1,6 +1,5 @@
 package com.example.application.SiteController;
 
-
 import com.example.application.Security.CustomUserDetailsService;
 import com.example.application.Token.JWTTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,17 +19,17 @@ import java.io.IOException;
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
 
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JWTTokenUtil jwtTokenUtil;
 
-    private CustomUserDetailsService customUserDetailsService;
-
-    private JWTTokenUtil jwtTokenUtil;
+    public JWTRequestFilter(CustomUserDetailsService customUserDetailsService, JWTTokenUtil jwtTokenUtil) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
-
         String username = null;
         String jwtToken = null;
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
