@@ -3,29 +3,26 @@ package com.example.application.SiteController;
 import com.example.application.Role.Role;
 import com.example.application.RoleRepository.RoleRepository;
 import com.example.application.User.User;
-import com.example.application.UserDto.LoginDto;
 import com.example.application.UserDto.UserDto;
 import com.example.application.UserRepository.UserRepository;
+import com.example.application.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
 
-@Controller
+@RestController
 public class SiteController {
 
-
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,15 +30,28 @@ public class SiteController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Lazy
+    @Autowired
+    private PasswordEncoder bcryptEncoderStart;
 
-    private PasswordEncoder passwordEncoder;
+    @Autowired
+    AuthService authService;
 
-    @PostMapping("/loginn")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+    @GetMapping("")
+    public String hello() {
+        return "aa";
+    }
+    @PostMapping("/login")
+    public ResponseEntity<String> authenticateUser(@RequestBody JWTRequest jwtRequest){
+        String token = "";
+        try {
+            token = authService.createAuthenticationToken(jwtRequest);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -59,13 +69,9 @@ public class SiteController {
 
         // create user object
         User user = new User();
-        user.setName(userDto.getName());
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        Role roles = roleRepository.findByName("ROLE_ADMIN").get();
-        user.setRoles((List<Role>) Collections.singleton(roles));
+        user.setPassword(bcryptEncoderStart.encode(userDto.getPassword()));
 
         userRepository.save(user);
 

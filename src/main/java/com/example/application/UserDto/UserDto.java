@@ -15,16 +15,19 @@ import javax.validation.constraints.NotEmpty;
 public class UserDto
 {
     private Long id;
+
     @NotEmpty
     private String username;
+
     @NotEmpty
-    private String Name;
+    private String firstName;
+
     @NotEmpty
-    private String FirstName;
-    @NotEmpty
-    private String LastName;
+    private String lastName;
+
     @NotEmpty
     private String email;
+
     @NotEmpty(message = "Password should not be empty")
     private String password;
 }
