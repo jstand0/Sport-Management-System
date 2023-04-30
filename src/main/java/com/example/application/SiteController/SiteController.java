@@ -1,59 +1,75 @@
 package com.example.application.SiteController;
 
+import com.example.application.Role.Role;
+import com.example.application.RoleRepository.RoleRepository;
 import com.example.application.User.User;
+import com.example.application.UserDto.LoginDto;
 import com.example.application.UserDto.UserDto;
 import com.example.application.UserRepository.UserRepository;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Collections;
 import java.util.List;
 
-@RestController
+@Controller
 public class SiteController {
 
+
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/index")
-    public String home() {
-        return "index.html";
+    @Autowired
+    private RoleRepository roleRepository;
+
+
+    private PasswordEncoder passwordEncoder;
+
+    @PostMapping("/loginn")
+    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
     }
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login.html";
-    }
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto){
 
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
-        return "register.html";
-    }
-
-    @PostMapping("/register/save")
-    public String registration(@ModelAttribute("user") UserDto user,
-                               BindingResult result,
-                               Model model) {
-        User existing = userRepository.findByEmail(user.getEmail());
-        if (existing != null) {
-            result.rejectValue("email", null, "There is already an account registered with that email");
+        // add check for username exists in a DB
+        if(userRepository.existsByUsername(userDto.getUsername())){
+            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
-        if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            return "register.html";
-        }
-//        userRepository.save(user);
-        return "redirect:/register?success";
-    }
 
-    @GetMapping("/users")
-    public String listRegisteredUsers(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        return "users.html";
+        // add check for email exists in DB
+        if(userRepository.existsByEmail(userDto.getEmail())){
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+        }
+
+        // create user object
+        User user = new User();
+        user.setName(userDto.getName());
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        Role roles = roleRepository.findByName("ROLE_ADMIN").get();
+        user.setRoles((List<Role>) Collections.singleton(roles));
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+
     }
 }

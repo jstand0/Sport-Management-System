@@ -52,6 +52,15 @@
 				<artifactId>xml-apis</artifactId>
 				<version>2.0.2</version>
 			</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
@@ -69,12 +78,6 @@
 					<version>6.2.0.Final</version>
 				</dependency>
 				<dependency>
-					<groupId>org.projectlombok</groupId>
-					<artifactId>lombok</artifactId>
-					<version>1.18.20</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-security</artifactId>
 					<version>2.5.4</version>
@@ -85,12 +88,16 @@
 					<version>20.1.0</version>
 					<scope>compile</scope>
 				</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 				<dependency>
 					<groupId>org.apache.tomcat.embed</groupId>
 					<artifactId>tomcat-embed-core</artifactId>
 					<version>9.0.31</version>
 				</dependency>
-				<dependency>
+					<dependency>
 					<groupId>com.auth0</groupId>
 					<artifactId>java-jwt</artifactId>
 					<version>3.18.1</version>
@@ -104,4 +111,20 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
