@@ -7,10 +7,6 @@ public class JWTRequest implements Serializable {
     private String username;
     private String password;
 
-    public JWTRequest()
-    {
-
-    }
 
     public JWTRequest(String username, String password) {
         this.setUsername(username);
