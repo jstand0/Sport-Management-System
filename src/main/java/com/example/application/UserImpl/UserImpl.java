@@ -28,7 +28,6 @@ public class UserImpl {
 
     public void saveUser(UserDto userDto) {
         User user = new User();
-        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.findByRole("ROLE_ADMIN");
@@ -58,15 +57,6 @@ public class UserImpl {
 
     private UserDto convertEntityToDto(User user) {
         UserDto userDto = new UserDto();
-        String[] name = user.getName().split(" ");
-
-        if (name.length > 0) {
-            userDto.setFirstName(name[0]);
-        }
-        if (name.length > 1) {
-            userDto.setLastName(name[1]);
-        }
-
         userDto.setEmail(user.getEmail());
         return userDto;
     }

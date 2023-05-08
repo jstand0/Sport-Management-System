@@ -46,7 +46,7 @@ public class JWTTokenUtil {
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         // Check for null expiration date
         return expiration != null && expiration.before(new Date());

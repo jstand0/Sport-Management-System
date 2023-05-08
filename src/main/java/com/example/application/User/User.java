@@ -22,10 +22,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
     private String username;
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -35,5 +36,4 @@ public class User {
     private List<Role> roles = new ArrayList<>();
 
 }
-
 

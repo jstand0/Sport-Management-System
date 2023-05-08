@@ -1,20 +1,24 @@
 package com.example.application.SiteController;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class JWTRequest implements Serializable {
 
     private String username;
     private String password;
 
 
-    public JWTRequest(String username, String password) {
-        this.setUsername(username);
-        this.setPassword(password);
-    }
-
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
@@ -22,7 +26,7 @@ public class JWTRequest implements Serializable {
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
